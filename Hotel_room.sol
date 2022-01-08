@@ -4,7 +4,7 @@ contract HotelRoom {
     address payable public owner;
     enum Statuses { Vacant, Occupied }
     Statuses currentStatus;
-    uint public amount = 2 ether;
+    uint public amount;
 
     constructor() public{
         owner = msg.sender;
@@ -26,7 +26,12 @@ contract HotelRoom {
 
 
     function updateAmount(uint _amount) public {
-        amount = _amount;
+        amount = _amount * 1 ether;
+    }
+
+    function vacate() public {
+        require(msg.sender == owner, "You are not authorized for this action");
+        currentStatus = Statuses.Vacant;
     }
 
     receive() external payable onlyWhileVacant costs(amount) {
